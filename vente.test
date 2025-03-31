@@ -1,0 +1,46 @@
+server {
+    listen 80;
+    server_name http://54.36.189.29:3050/;
+
+    location / {
+        root /var/www/licorne/build;
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api {
+        proxy_pass http://54.36.189.29:5050/api;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        add_header 'Access-Control-Allow-Origin' 'http://54.36.189.29/';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE';
+        add_header 'Access-Control-Allow-Headers' 'Origin, X-Requested-With, Content-Type, Accept';
+        proxy_ssl_server_name on;
+    }
+
+    location /uploads {
+        alias /var/www/vente/build/uploads;
+        try_files $uri $uri/ /index.html;
+        add_header 'Access-Control-Allow-Origin' 'http://54.36.189.29/';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE';
+        add_header 'Access-Control-Allow-Headers' 'Origin, X-Requested-With, Content-Type, Accept';
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/licorne-academy.store/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/licorne-academy.store/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = 54.36.189.29) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80 default_server;
+    server_name 54.36.189.29;
+    return 404; # managed by Certbot
+}
+

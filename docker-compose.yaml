@@ -1,0 +1,29 @@
+services:
+  frontend:
+    build: ./frontend
+    container_name: react-app-front
+    ports:
+      - '3050:3050'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    networks:
+      - mern-networks
+    volumes:
+      - /var/www/vente/build/uploads:/app/uploads
+
+  backend:
+    build: ./backend
+    container_name: node-api-back
+    ports:
+      - '5050:5050'
+    restart: always
+    networks:
+      - mern-networks
+    volumes:
+      - /var/www/vente/build/uploads:/app/uploads
+
+networks:
+  mern-networks:
+    driver: bridge
