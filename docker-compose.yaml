@@ -6,9 +6,6 @@ services:
       - '3050:3050'
     stdin_open: true
     tty: true
-    depends_on:
-      backend:
-        condition: service_healthy
     networks:
       - mern-networks
     volumes:
@@ -42,9 +39,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
-    depends_on:
-      mongo:
-        condition: service_healthy
     labels:
       - "prometheus.scrape=true"
       - "prometheus.port=5050"
@@ -83,9 +77,6 @@ services:
       - '--web.enable-lifecycle'
     networks:
       - mern-networks
-    depends_on:
-      - backend
-      - frontend
 
   grafana:
     image: grafana/grafana:latest
@@ -102,8 +93,6 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - mern-networks
-    depends_on:
-      - prometheus
 
   node-exporter:
     image: prom/node-exporter:latest
