@@ -1,7 +1,7 @@
 services:
   frontend:
     build: ./frontend
-    container_name: react-app-front
+    container_name: front
     ports:
       - '3050:3050'
     stdin_open: true
@@ -23,7 +23,7 @@ services:
 
   backend:
     build: ./backend
-    container_name: node-api-back
+    container_name: back
     ports:
       - '5050:5050'
     restart: always
