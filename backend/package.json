@@ -12,9 +12,9 @@
     "data:import": "node backend/seeder.js",
     "data:destroy": "node backend/seeder.js -d"
   },
-  "author": "tarek",
   "license": "MIT",
   "dependencies": {
+    "prom-client": "^14.2.0",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cors": "^2.8.5",

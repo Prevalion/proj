@@ -1,14 +1,15 @@
-FROM node:23-alpine3.20
+FROM node:20-alpine3.18
 
 WORKDIR /app
 
-COPY package.json .
+COPY package*.json ./
 
 RUN npm install
 
 COPY . .
 
+RUN mkdir -p /app/uploads
 
 EXPOSE 5050
 
-CMD ["node","server"] && ["node","seeder"]
+CMD ["sh", "-c", "node server.js && node seeder.js"]
