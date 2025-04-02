@@ -12,4 +12,4 @@ RUN mkdir -p /app/uploads
 
 EXPOSE 5050
 
-CMD ["sh", "-c", "node server.js && node seeder.js"]
+CMD ["sh", "-c", "node seeder.js && node server.js"]
