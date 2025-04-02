@@ -1,19 +1,19 @@
+// backend/server.js (update)
 import express from 'express';
 import dotenv from 'dotenv';
 
 import productRoutes from './routes/productRoutes.js';
+import userRoutes from './routes/userRoutes.js'; // Add this line
 
 //ajout tarek
 import path from 'path';
 import cors from 'cors';
-
 
 dotenv.config();
 
 import connectDB from './config/db.js';
 
 import { notFound, errorHandler } from './middleware/errorMiddleware.js'
-
 
 //modif tarek
 const port = process.env.PORT || 5050; 
@@ -23,7 +23,8 @@ connectDB();
 
 const app = express();
 
-//ajout tarek
+// Body parser middleware
+app.use(express.json()); // Add this line to parse JSON bodies
 app.use(express.urlencoded({ extended: true }));
 app.use(cors('http://54.36.189.29:3050'));
 
@@ -36,6 +37,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/products', productRoutes);
+app.use('/api/users', userRoutes); // Add this line
 
 //ajout tarek
 if (process.env.NODE_ENV === 'production') {
@@ -58,6 +60,5 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(notFound);
 app.use(errorHandler);
-
 
 app.listen(port, () => console.log(`Server running on port ${port}`))
