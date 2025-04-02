@@ -25,9 +25,12 @@ connectDB();
 const app = express();
 
 // Body parser middleware
-app.use(express.json()); // Add this line to parse JSON bodies
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors('http://54.36.189.29:3050'));
+app.use(cors({
+  origin: ['http://frontend:3050', 'http://54.36.189.29:3050'],
+  credentials: true
+}));
 
 app.get('/', (req, res) => { 
    res.send('API is running...')
@@ -44,9 +47,8 @@ app.use('/api/orders', orderRoutes); // Add this line
 //ajout tarek
 if (process.env.NODE_ENV === 'production') {
    const __dirname = path.resolve();
-   //modification tarek
-   app.use('/uploads', express.static('/var/www/vente/build'));
-   //app.use(express.static(path.join(__dirname, '/frontend/build')));
+   app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+   app.use(express.static(path.join(__dirname, '/frontend/build')));
  
    //any route that is not api will be redirected to index.html
    app.get('*', (req, res) =>

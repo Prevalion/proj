@@ -10,6 +10,6 @@ COPY . .
 
 RUN mkdir -p /app/uploads
 
-EXPOSE 3050
+EXPOSE 3000
 
 CMD ["npm", "start"]
