@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import { useLoginMutation } from '../slices/usersApiSlice';
-import { setCredentials } from '../slices/authSlice';
+import { setCredentials, authRequest, authFail, resetAuth } from '../slices/authSlice';
 import Message from '../components/Message';
 
 const LoginScreen = () => {
@@ -15,13 +15,18 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading, error }] = useLoginMutation();
+  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo, loading, error, success } = useSelector((state) => state.auth);
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get('redirect') || '/';
+
+  useEffect(() => {
+    // Reset auth state when mounting the component
+    dispatch(resetAuth());
+  }, [dispatch]);
 
   useEffect(() => {
     if (userInfo) {
@@ -32,11 +37,12 @@ const LoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      dispatch(authRequest());
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       navigate(redirect);
     } catch (err) {
-      // Error is handled by RTK Query
+      dispatch(authFail(err?.data?.message || err.error || 'Authentication failed'));
     }
   };
 
@@ -44,7 +50,8 @@ const LoginScreen = () => {
     <FormContainer>
       <h1>Sign In</h1>
 
-      {error && <Message variant='danger'>{error?.data?.message || error.error}</Message>}
+      {error && <Message variant='danger'>{error}</Message>}
+      {success && <Message variant='success'>Login successful!</Message>}
 
       <Form onSubmit={submitHandler}>
         <Form.Group className='my-3' controlId='email'>
@@ -68,7 +75,7 @@ const LoginScreen = () => {
         </Form.Group>
 
         <Button
-          disabled={isLoading}
+          disabled={loading || isLoginLoading}
           type='submit'
           variant='primary'
           className='mt-2'
@@ -76,7 +83,7 @@ const LoginScreen = () => {
           Sign In
         </Button>
 
-        {isLoading && <Loader />}
+        {(loading || isLoginLoading) && <Loader />}
       </Form>
 
       <Row className='py-3'>

@@ -25,24 +25,85 @@ import ShippingScreen from './screens/ShippingScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
-import PrivateRoute from './components/PrivateRoute';
+import ProfileScreen from './screens/ProfileScreen';
+import ProductListScreen from './screens/admin/ProductListScreen';
+import ProductEditScreen from './screens/admin/ProductEditScreen';
+import OrderListScreen from './screens/admin/OrderListScreen';
+import UserListScreen from './screens/admin/UserListScreen';
+import UserEditScreen from './screens/admin/UserEditScreen';
+import SearchScreen from './screens/SearchScreen';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />} />
+      <Route path="/page/:pageNumber" element={<HomeScreen />} />
+      <Route path="/search/:keyword" element={<HomeScreen />} />
+      <Route path="/search/:keyword/page/:pageNumber" element={<HomeScreen />} />
       <Route path="/product/:id" element={<ProductScreen />} />
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       
-      {/* Private Routes */}
-      <Route path="" element={<PrivateRoute />}>
-        <Route path="/shipping" element={<ShippingScreen />} />
-        <Route path="/payment" element={<PaymentScreen />} />
-        <Route path="/placeorder" element={<PlaceOrderScreen />} />
-        <Route path="/order/:id" element={<OrderScreen />} />
-      </Route>
+      {/* Protected Routes */}
+      <Route path="/shipping" element={
+        <ProtectedRoute>
+          <ShippingScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/payment" element={
+        <ProtectedRoute>
+          <PaymentScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/placeorder" element={
+        <ProtectedRoute>
+          <PlaceOrderScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/order/:id" element={
+        <ProtectedRoute>
+          <OrderScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <ProfileScreen />
+        </ProtectedRoute>
+      } />
+      
+      {/* Admin Routes */}
+      <Route path="/admin/productlist" element={
+        <ProtectedRoute adminOnly={true}>
+          <ProductListScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/productlist/:pageNumber" element={
+        <ProtectedRoute adminOnly={true}>
+          <ProductListScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/product/:id/edit" element={
+        <ProtectedRoute adminOnly={true}>
+          <ProductEditScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/orderlist" element={
+        <ProtectedRoute adminOnly={true}>
+          <OrderListScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/userlist" element={
+        <ProtectedRoute adminOnly={true}>
+          <UserListScreen />
+        </ProtectedRoute>
+      } />
+      <Route path="/admin/user/:id/edit" element={
+        <ProtectedRoute adminOnly={true}>
+          <UserEditScreen />
+        </ProtectedRoute>
+      } />
     </Route>
   )
 );

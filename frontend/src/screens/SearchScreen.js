@@ -1,24 +1,17 @@
-import { Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { Row, Col } from 'react-bootstrap';
 import Product from '../components/Product';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import Paginate from '../components/Paginate';
-import ProductCarousel from '../components/ProductCarousel';
 import { useGetProductsQuery } from '../slices/productsApiSlice';
 
-const HomeScreen = () => {
-  const { pageNumber, keyword } = useParams();
-  
-  const { data, isLoading, error } = useGetProductsQuery({ 
-    keyword, 
-    pageNumber 
-  });
- 
+const SearchScreen = () => {
+  const { keyword } = useParams();
+  const { data, isLoading, error } = useGetProductsQuery(keyword);
+
   return (
     <>
-      {!keyword && <ProductCarousel />}
-      
+      <h1>Search Results</h1>
       {isLoading ? (
         <Loader />
       ) : error ? (
@@ -27,7 +20,9 @@ const HomeScreen = () => {
         </Message>
       ) : (
         <>
-          <h1>Latest Products</h1>
+          {data.products.length === 0 && (
+            <Message>No products found for "{keyword}"</Message>
+          )}
           <Row>
             {data.products.map((product) => (
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
@@ -35,15 +30,10 @@ const HomeScreen = () => {
               </Col>
             ))}
           </Row>
-          <Paginate 
-            pages={data.pages} 
-            page={data.page} 
-            keyword={keyword ? keyword : ''}
-          />
         </>
       )}
     </>
   );
 };
 
-export default HomeScreen;
+export default SearchScreen; 
