@@ -11,7 +11,7 @@ const ProductCarousel = () => {
     <Loader />
   ) : error ? (
     <Message variant='danger'>{error?.data?.message || error.error}</Message>
-  ) : (
+  ) : products && products.length > 0 ? (
     <Carousel pause='hover' className='bg-primary mb-4'>
       {products.map((product) => (
         <Carousel.Item key={product._id}>
@@ -26,6 +26,8 @@ const ProductCarousel = () => {
         </Carousel.Item>
       ))}
     </Carousel>
+  ) : (
+    <Message>No top-rated products found</Message>
   );
 };
 
