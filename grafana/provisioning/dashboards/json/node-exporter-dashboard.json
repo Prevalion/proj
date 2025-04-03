@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -46,7 +46,7 @@
         "x": 0,
         "y": 0
       },
-      "id": null,
+      "id": 2,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
