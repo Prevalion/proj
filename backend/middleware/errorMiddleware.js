@@ -12,5 +12,4 @@ const errorHandler = (err, req, res, next) => {
     });
 };
 
-export { notFound };
-export default errorHandler;
+export { notFound, errorHandler };

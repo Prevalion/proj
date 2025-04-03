@@ -1,9 +1,9 @@
 services:
   frontend:
     build: ./frontend
-    container_name: front
+    container_name: vente-frontend
     ports:
-      - '3050:3000'
+      - '3000:3000'
     stdin_open: true
     tty: true
     networks:
@@ -13,14 +13,22 @@ services:
     environment:
       - NODE_ENV=production
       - REACT_APP_API_URL=http://backend:5050
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
     labels:
       - "prometheus.scrape=true"
-      - "prometheus.port=3050"
+      - "prometheus.port=3000"
       - "prometheus.path=/metrics"
+    depends_on:
+      - backend
 
   backend:
     build: ./backend
-    container_name: back
+    container_name: vente-backend
     ports:
       - '5050:5050'
     restart: always
@@ -31,7 +39,9 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5050
-      - MONGO_URI=mongodb://mongo:27017/your_database
+      - MONGO_URI=mongodb://mongo:27017/vente_db
+      - JWT_SECRET=${JWT_SECRET:-default_dev_secret_change_in_production}
+      - ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
       - ENABLE_METRICS=true
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5050/api/health"]
@@ -43,10 +53,12 @@ services:
       - "prometheus.scrape=true"
       - "prometheus.port=5050"
       - "prometheus.path=/metrics"
+    depends_on:
+      - mongo
 
   mongo-exporter:
     image: percona/mongodb_exporter:0.44.0
-    container_name: mongo-exporter
+    container_name: vente-mongo-exporter
     command:
       - '--mongodb.uri=mongodb://mongo:27017'
     ports:
@@ -58,7 +70,7 @@ services:
 
   mongo:
     image: mongo:4.4
-    container_name: mongo-db
+    container_name: vente-mongo-db
     ports:
       - '27017:27017'
     volumes:
@@ -71,10 +83,12 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+    environment:
+      - MONGO_INITDB_DATABASE=vente_db
 
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus
+    container_name: vente-prometheus
     restart: always
     ports:
       - "9090:9090"
@@ -92,23 +106,23 @@ services:
 
   grafana:
     image: grafana/grafana:latest
-    container_name: grafana
+    container_name: vente-grafana
     restart: always
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-changeme123}
       - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - mern-networks
 
   node-exporter:
     image: prom/node-exporter:latest
-    container_name: node-exporter
+    container_name: vente-node-exporter
     restart: always
     volumes:
       - /proc:/host/proc:ro
