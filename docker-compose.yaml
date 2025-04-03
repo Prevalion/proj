@@ -3,7 +3,7 @@ services:
     build: ./frontend
     container_name: front
     ports:
-      - '3050:3050'
+      - '3050:3000'
     stdin_open: true
     tty: true
     networks:
