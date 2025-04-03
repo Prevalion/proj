@@ -124,7 +124,7 @@
       "pluginVersion": "7.1.1",
       "targets": [
         {
-          "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) * 100)",
+          "expr": "100 - (avg by(instance_name) (rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) * 100)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -180,7 +180,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) * 100)",
+          "expr": "100 - (avg by(instance_name) (rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) * 100)",
           "interval": "",
           "legendFormat": "CPU Usage",
           "refId": "A"
