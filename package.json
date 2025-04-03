@@ -15,6 +15,7 @@
   "author": "tarek",
   "license": "MIT",
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.8.2",
     "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
