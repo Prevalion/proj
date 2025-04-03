@@ -42,6 +42,7 @@ const router = createBrowserRouter(
       <Route path="/search/:keyword/page/:pageNumber" element={<HomeScreen />} />
       <Route path="/product/:id" element={<ProductScreen />} />
       <Route path="/cart" element={<CartScreen />} />
+      <Route path="/cart/:id?" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/admin/productlist" element={<ProtectedRoute adminOnly={true}><ProductListScreen /></ProtectedRoute>} />
