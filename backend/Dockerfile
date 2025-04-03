@@ -23,4 +23,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
 
 EXPOSE 5050
 
-CMD ["sh", "-c", "node server.js && node seeder.js"]
+CMD ["sh", "-c", "node seeder.js && node server.js"]
