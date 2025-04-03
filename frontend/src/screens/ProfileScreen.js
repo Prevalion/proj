@@ -19,6 +19,7 @@ const ProfileScreen = () => {
 
   const dispatch = useDispatch();
 
+  // eslint-disable-next-line no-unused-vars
   const { userInfo } = useSelector((state) => state.auth);
 
   const { data: profile, isLoading, refetch, error } = useGetUserProfileQuery();

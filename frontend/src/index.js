@@ -31,7 +31,6 @@ import ProductEditScreen from './screens/admin/ProductEditScreen';
 import OrderListScreen from './screens/admin/OrderListScreen';
 import UserListScreen from './screens/admin/UserListScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
-import SearchScreen from './screens/SearchScreen';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter(

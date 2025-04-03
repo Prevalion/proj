@@ -34,6 +34,15 @@ export const useAuth = () => {
   
   const [logoutApiCall] = useLogoutMutation();
   
+  const handleLogout = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+    } catch (err) {
+      dispatch(logout());
+    }
+  };
+  
   useEffect(() => {
     // Handle token verification results
     if (shouldVerify && !verifying) {
@@ -45,16 +54,7 @@ export const useAuth = () => {
         dispatch(setCredentials({ ...data }));
       }
     }
-  }, [dispatch, handleLogout]);
-  
-  const handleLogout = async () => {
-    try {
-      await logoutApiCall().unwrap();
-      dispatch(logout());
-    } catch (err) {
-      dispatch(logout());
-    }
-  };
+  }, [dispatch, handleLogout, data, shouldVerify, verifyError, verifying]);
   
   return {
     userInfo,
