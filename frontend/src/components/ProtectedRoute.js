@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   useEffect(() => {
     // Verify token when route changes
     verifyToken();
-  }, [location.pathname]);
+  }, [verifyToken]);
 
   if (loading) {
     return <Loader />;

@@ -45,7 +45,7 @@ export const useAuth = () => {
         dispatch(setCredentials({ ...data }));
       }
     }
-  }, [verifying, verifyError, data, shouldVerify]);
+  }, [dispatch, handleLogout]);
   
   const handleLogout = async () => {
     try {
