@@ -44,6 +44,18 @@ services:
       - "prometheus.port=5050"
       - "prometheus.path=/metrics"
 
+  mongo-exporter:
+    image: percona/mongodb_exporter:latest
+    container_name: mongo-exporter
+    command:
+      - '--mongodb.uri=mongodb://mongo:27017'
+    ports:
+      - "9216:9216"
+    networks:
+      - mern-networks
+    depends_on:
+      - mongo
+
   mongo:
     image: mongo:4.4
     container_name: mongo-db
