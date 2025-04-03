@@ -45,7 +45,7 @@ services:
       - "prometheus.path=/metrics"
 
   mongo-exporter:
-    image: percona/mongodb_exporter:latest
+    image: percona/mongodb_exporter:0.44.0
     container_name: mongo-exporter
     command:
       - '--mongodb.uri=mongodb://mongo:27017'
