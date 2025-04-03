@@ -25,7 +25,7 @@ const ProductScreen = () => {
 
   const addToCartHandler = () => {
     if (product.countInStock > 0) {
-      navigate(`/cart/${id}?qty=${qty}`);
+      navigate(`/cart/${productId}?qty=${qty}`);
     } else {
       alert('Product is out of stock');
     }
