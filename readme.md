@@ -152,7 +152,7 @@ npm run data:destroy
 ### Production
 Build and run the application using Docker Compose:
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ---
