@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
+import PayPalButton from '../components/PayPalButton';
 import {
   useGetOrderDetailsQuery,
   usePayOrderMutation,
@@ -32,7 +34,25 @@ const OrderScreen = () => {
       refetch();
       toast.success('Order delivered');
     } catch (err) {
-      toast.error(err?.data?.message || err.message);
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const onPaymentSuccess = async (details) => {
+    try {
+      await payOrder({
+        orderId,
+        paymentResult: {
+          id: details.id,
+          status: details.status,
+          update_time: details.update_time,
+          email_address: details.payer.email_address,
+        },
+      });
+      refetch();
+      toast.success('Payment successful');
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 
@@ -147,6 +167,20 @@ const OrderScreen = () => {
                 </Row>
               </ListGroup.Item>
 
+              {/* PayPal Payment Button */}
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  <PayPalScriptProvider>
+                    <PayPalButton 
+                      amount={order.totalPrice} 
+                      onSuccess={onPaymentSuccess} 
+                    />
+                  </PayPalScriptProvider>
+                </ListGroup.Item>
+              )}
+
+              {/* Admin: Mark as Delivered Button */}
               {userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
                 <ListGroup.Item>
                   <Button

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { logout } from './authSlice';
-import { BASE_URL } from '../constants';
+import { BASE_URL, PAYPAL_URL } from '../constants';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
@@ -30,5 +30,14 @@ const customBaseQuery = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   baseQuery: customBaseQuery,
   tagTypes: ['Product', 'Order', 'User'],
-  endpoints: (builder) => ({}),
+  endpoints: (builder) => ({
+    getPayPalClientId: builder.query({
+      query: () => ({
+        url: PAYPAL_URL,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+  }),
 });
+
+export const { useGetPayPalClientIdQuery } = apiSlice;
