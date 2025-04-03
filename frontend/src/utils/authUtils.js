@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
   useVerifyTokenQuery, 
@@ -34,14 +34,14 @@ export const useAuth = () => {
   
   const [logoutApiCall] = useLogoutMutation();
   
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
     } catch (err) {
       dispatch(logout());
     }
-  };
+  }, [logoutApiCall, dispatch]);
   
   useEffect(() => {
     // Handle token verification results
