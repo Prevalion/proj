@@ -24,13 +24,11 @@ const ProductScreen = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
   const addToCartHandler = () => {
-    if (!product) return;
-    
-    dispatch(addToCart({
-      ...product,
-      qty,
-    }));
-    navigate('/cart');
+    if (product.countInStock > 0) {
+      navigate(`/cart/${id}?qty=${qty}`);
+    } else {
+      alert('Product is out of stock');
+    }
   };
   
   const submitHandler = async (e) => {

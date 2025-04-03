@@ -13,7 +13,7 @@ const PayPalButton = ({ amount, onSuccess }) => {
         paypalDispatch({
           type: 'resetOptions',
           value: {
-            'client-id': paypal.clientId,
+            'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID || '',
             currency: 'USD',
           },
         });
@@ -47,4 +47,4 @@ const PayPalButton = ({ amount, onSuccess }) => {
   );
 };
 
-export default PayPalButton; 
+export default PayPalButton;

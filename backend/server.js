@@ -27,10 +27,9 @@ const app = express();
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: ['http://frontend:3050', 'http://54.36.189.29:3050'],
-  credentials: true
-}));
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'];
+app.use(cors({ origin: allowedOrigins }));
 
 app.get('/', (req, res) => { 
    res.send('API is running...')

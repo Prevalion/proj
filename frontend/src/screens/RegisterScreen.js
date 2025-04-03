@@ -32,11 +32,28 @@ const RegisterScreen = () => {
     }
   }, [navigate, redirect, userInfo]);
 
+  const validateInput = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage('Invalid email format');
+      return false;
+    }
+    if (password.length < 6) {
+      setMessage('Password must be at least 6 characters');
+      return false;
+    }
+    return true;
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     
     if (password !== confirmPassword) {
       setMessage('Passwords do not match');
+      return;
+    }
+
+    if (!validateInput()) {
       return;
     }
     
