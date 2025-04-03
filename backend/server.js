@@ -10,7 +10,7 @@ import orderRoutes from './routes/orderRoutes.js'; // Add this line
 import path from 'path';
 import cors from 'cors';
 
-require('dotenv').config();
+dotenv.config();
 
 import connectDB from './config/db.js';
 
