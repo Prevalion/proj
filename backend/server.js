@@ -3,6 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import cors from 'cors';
+import promClient from 'prom-client';
 
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
@@ -21,6 +22,33 @@ connectDB();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Metrics endpoint
+app.get('/metrics', async (req, res) => {
+  try {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+  } catch (error) {
+    console.error('Error generating metrics:', error);
+    res.status(500).send(`Error generating metrics: ${error.message}`);
+  }
+});
+
+// Setup Prometheus metrics
+const collectDefaultMetrics = promClient.collectDefaultMetrics;
+const Registry = promClient.Registry;
+const register = new Registry();
+collectDefaultMetrics({ register });
+
+// Custom metrics
+const httpRequestDurationMicroseconds = new promClient.Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Duration of HTTP requests in seconds',
+  labelNames: ['method', 'route', 'status_code'],
+  buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10]
+});
+
+register.registerMetric(httpRequestDurationMicroseconds);
+
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +61,27 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true
 }));
+
+// Middleware to record request duration
+app.use((req, res, next) => {
+  if (process.env.ENABLE_METRICS === 'true') {
+    const end = httpRequestDurationMicroseconds.startTimer();
+    res.on('finish', () => {
+      end({ 
+        method: req.method, 
+        route: req.originalUrl, 
+        status_code: res.statusCode 
+      });
+    });
+  }
+  next();
+});
+
+// Metrics endpoint
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
