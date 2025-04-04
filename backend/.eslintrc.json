@@ -1,0 +1,38 @@
+{
+    "env": {
+      "es2021": true,
+      "node": true
+    },
+    "extends": ["airbnb-base", "plugin:prettier/recommended"],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "plugins": ["prettier"],
+    "rules": {
+      "prettier/prettier": ["error", { "endOfLine": "auto" }], // Use Prettier rules, handle line endings automatically
+      "no-console": "warn", // Warn about console logs instead of erroring
+      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }], // Warn about unused vars, ignore if starts with _
+      "import/prefer-default-export": "off", // Allow named exports
+      "no-underscore-dangle": "off", // Allow underscore dangles (e.g., _id)
+      "no-param-reassign": ["error", { "props": false }], // Allow reassigning properties of parameters (e.g., req.user)
+      "consistent-return": "off", // Allow functions to sometimes not return a value
+      "func-names": "off", // Allow anonymous functions
+      "import/extensions": [
+        "error",
+        "ignorePackages",
+        {
+          "js": "always" // Require .js extension for imports
+        }
+      ]
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "extensions": [".js"]
+        }
+      }
+    }
+  }
+  
+  

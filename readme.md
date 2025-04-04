@@ -1,190 +1,101 @@
-# Vente - E-Commerce Platform
-
-This repository contains a full-featured e-commerce platform built with the MERN stack (MongoDB, Express, React, Node.js). The platform supports user authentication, product management, order processing, and admin functionalities.
-
-## Table of Contents
-
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Tech Stack](#tech-stack)
-- [License](#license)
-
----
+# Vente - MERN E-commerce Platform
 
 ## Features
 
-### User Features
-- Browse products with search and pagination.
-- Add products to the cart and manage the cart.
-- Checkout with shipping, payment, and order placement.
-- View order details and track order status.
-- Leave product reviews and ratings.
+* Full featured shopping cart
+* Product reviews and ratings
+* Top products carousel
+* Product pagination
+* Product search feature
+* User profile with orders
+* Admin product management
+* Admin user management
+* Admin Order details page
+* Mark orders as delivered option
+* Checkout process (shipping, payment method, etc)
+* PayPal / credit card integration
+* Database seeder (products & users)
+* **Basic Security:** Helmet, Rate Limiting, Input Sanitization
+* **Structured Logging:** Pino for backend logging
+* **Code Quality:** ESLint & Prettier configured
 
-### Admin Features
-- Manage products (create, update, delete).
-- Manage users (view, update, delete).
-- Manage orders (view, mark as delivered).
+## Setup & Installation
 
----
+1.  **Clone the repository:**
+    ```bash
+    git clone <your-repo-url>
+    cd proj
+    ```
 
-## Project Structure
-Collecting workspace information```markdown
-# Vente - E-Commerce Platform
+2.  **Backend Setup:**
+    * Navigate to the backend directory: `cd backend`
+    * Create a `.env` file in the `backend` root directory. Copy the contents of `.env.example` into it and fill in your actual values for:
+        * `NODE_ENV` (development or production)
+        * `PORT` (e.g., 5000)
+        * `MONGO_URI` (Your MongoDB connection string)
+        * `JWT_SECRET` (A long, random, secret string)
+        * `PAYPAL_CLIENT_ID` (Your PayPal Sandbox or Live Client ID)
+    * Install dependencies: `npm install`
 
-This repository contains a full-featured e-commerce platform built with the MERN stack (MongoDB, Express, React, Node.js). The platform supports user authentication, product management, order processing, and admin functionalities.
+3.  **Frontend Setup:**
+    * Navigate to the frontend directory: `cd ../frontend`
+    * Install dependencies: `npm install`
+    * *(Optional)* Create a `.env` file in the `frontend` root if you want to override API URLs (see `src/constants.js`).
 
-## Table of Contents
+4.  **Run the Application (Development):**
+    * From the **root `proj` directory**: `npm run dev`
+    * This uses `concurrently` (defined in the root `package.json`) to start both the backend server (with `nodemon`) and the frontend React development server.
 
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Tech Stack](#tech-stack)
-- [License](#license)
+5.  **Seed Database (Optional):**
+    * To import sample data (users, products):
+        ```bash
+        # From the root proj directory
+        npm run data:import
+        ```
+    * To destroy all data:
+        ```bash
+        # From the root proj directory
+        npm run data:destroy
+        ```
 
----
+## Available Scripts
 
-## Features
+### Root Directory (`proj`)
 
-### User Features
-- Browse products with search and pagination.
-- Add products to the cart and manage the cart.
-- Checkout with shipping, payment, and order placement.
-- View order details and track order status.
-- Leave product reviews and ratings.
+* `npm run dev`: Starts both backend and frontend servers concurrently for development.
+* `npm run data:import`: Seeds the database with sample data (runs backend seeder).
+* `npm run data:destroy`: Destroys all data in the database (runs backend seeder).
 
-### Admin Features
-- Manage products (create, update, delete).
-- Manage users (view, update, delete).
-- Manage orders (view, mark as delivered).
+### Backend Directory (`proj/backend`)
 
----
+* `npm start`: Starts the backend server (for production).
+* `npm run server`: Starts the backend server using `nodemon` (for development).
+* `npm run lint`: Lints backend code using ESLint.
+* `npm run format`: Formats backend code using Prettier.
 
-## Project Structure
+### Frontend Directory (`proj/frontend`)
 
-```
-.env
-.gitignore
-docker-compose.yaml
-package.json
-backend/
-  ├── controllers/
-  ├── data/
-  ├── middleware/
-  ├── models/
-  ├── routes/
-  ├── utils/
-  ├── server.js
-frontend/
-  ├── public/
-  ├── src/
-      ├── components/
-      ├── screens/
-      ├── slices/
-      ├── utils/
-      ├── App.js
-      ├── index.js
-grafana/
-prometheus/
-```
+* `npm start`: Starts the frontend React development server.
+* `npm run build`: Builds the frontend application for production.
+* `npm test`: Runs frontend tests.
+* `npm run lint`: Lints frontend code using ESLint.
+* `npm run format`: Formats frontend code using Prettier.
 
----
+## Environment Variables (Backend `.env`)
 
-## Installation
+* `NODE_ENV`: `development` or `production`
+* `PORT`: Port for the backend server (e.g., 5000)
+* `MONGO_URI`: Your MongoDB connection string
+* `JWT_SECRET`: Secret key for signing JWTs (make this strong and keep it secret)
+* `JWT_EXPIRES_IN`: Token expiration time (e.g., `30d`)
+* `PAYPAL_CLIENT_ID`: Your PayPal application client ID
 
-### Prerequisites
-- Node.js
-- MongoDB
-- Docker and Docker Compose (optional for containerized deployment)
+## Linting and Formatting
 
-### Steps
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repo/vente.git
-   cd vente
-   ```
+This project uses ESLint and Prettier to maintain code quality and consistency.
 
-2. Install dependencies:
-   ```bash
-   # Backend
-   cd backend
-   npm install
+* Run `npm run lint` in `backend` or `frontend` to check for linting errors.
+* Run `npm run format` in `backend` or `frontend` to automatically format code.
+* Consider installing ESLint and Prettier extensions in your code editor for real-time feedback and auto-formatting on save.
+* Husky and lint-staged are configured to automatically lint and format staged files before committing.
 
-   # Frontend
-   cd ../frontend
-   npm install
-   ```
-
-3. Set up environment variables:
-   - Create a `.env` file in the `backend` directory.
-   - Add the following variables:
-     ```
-     NODE_ENV=development
-     PORT=5050
-     MONGO_URI=your_mongo_connection_string
-     JWT_SECRET=your_jwt_secret
-     ```
-
----
-
-## Usage
-
-### Development
-Run the application in development mode:
-```bash
-npm run dev
-```
-
-### Database Seeding
-Seed the database with sample data:
-```bash
-# Import data
-npm run data:import
-
-# Destroy data
-npm run data:destroy
-```
-
-### Production
-Build and run the application using Docker Compose:
-```bash
-docker compose up -d
-```
-
----
-
-## API Endpoints
-
-### Products
-- `GET /api/products` - Get all products.
-- `GET /api/products/:id` - Get product details.
-- `POST /api/products/:id/reviews` - Add a product review.
-
-### Users
-- `POST /api/users` - Register a new user.
-- `POST /api/users/login` - Authenticate a user.
-- `GET /api/users/profile` - Get user profile.
-
-### Orders
-- `POST /api/orders` - Create a new order.
-- `GET /api/orders/:id` - Get order details.
-- `PUT /api/orders/:id/deliver` - Mark order as delivered.
-
----
-
-## Tech Stack
-
-- **Frontend**: React, Redux Toolkit, React Bootstrap
-- **Backend**: Node.js, Express.js, MongoDB
-- **Authentication**: JWT
-- **DevOps**: Docker, Prometheus, Grafana
-
----
-
-## License
-
-This project is licensed under the MIT License.

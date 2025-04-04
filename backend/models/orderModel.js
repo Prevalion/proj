@@ -1,81 +1,99 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
-const orderSchema = mongoose.Schema({
-    user : {
-        type:mongoose.Schema.Types.ObjectId,
-        required:true,
-        ref: 'User'
+const orderSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User', // Reference to the User model
     },
-    orderItems : [
-        {
-            name :   { type : String, required: true },
-            qty :   { type : Number, required: true },
-            image:   { type : String, required: true },
-            price :   { type : Number, required: true },
-            product :   { type : mongoose.Schema.Types.ObjectId, 
-              required: true,
-              ref: 'Product'
-            },
-        }
+    orderItems: [
+      {
+        name: { type: String, required: true },
+        qty: { type: Number, required: true },
+        image: { type: String, required: true },
+        price: { type: Number, required: true },
+        product: {
+          // Reference to the specific product
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'Product',
+        },
+      },
     ],
-    shippingAddress : {
-        address : { type: String , required: true  },
-        city : { type: String , required: true  },
-        postalCode : { type: String , required: true  },
-        country : { type: String , required: true  },
+    shippingAddress: {
+      address: { type: String, required: true },
+      city: { type: String, required: true },
+      postalCode: { type: String, required: true },
+      country: { type: String, required: true },
     },
-    paymentMethod : {
-        type:String,
-        required:true
+    paymentMethod: {
+      type: String,
+      required: true,
     },
-    paymentResult : {
-       id:  {type: String} ,
-       status:  {type: String} ,
-       update_time:  {type: String} ,
-       email_address:  {type: String} ,
+    paymentResult: {
+      // Details from payment provider (e.g., PayPal)
+      id: { type: String },
+      status: { type: String },
+      update_time: { type: String },
+      email_address: { type: String },
     },
-    itemsPrice : {
-        type:Number,
-        required:true,
-        default: 0.0
+    itemsPrice: {
+      // Price of items only
+      type: Number,
+      required: true,
+      default: 0.0,
     },
-    taxPrice : {
-        type:Number,
-        required:true,
-        default: 0.0
+    taxPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
     },
-    shippingPrice : {
-        type:Number,
-        required:true,
-        default: 0.0
+    shippingPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
     },
-    totalPrice : {
-        type:Number,
-        required:true,
-        default: 0.0
+    totalPrice: {
+      // Total cost including tax and shipping
+      type: Number,
+      required: true,
+      default: 0.0,
     },
-    isPaid : {
-        type:Boolean,
-        required:true,
-        default: false
+    isPaid: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
     paidAt: {
-        type: Date
+      type: Date,
     },
-    isDelivered : {
-        type:Boolean,
-        required:true,
-        default: false
+    isDelivered: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
     deliveredAt: {
-        type: Date
+      type: Date,
     },
-    
-},
- {
-        timestamps:true
-});
+  },
+  {
+    timestamps: true, // Automatically add createdAt and updatedAt fields
+  }
+);
 
-const Order = mongoose.model('Order', orderSchema)
+// --- Indexes ---
+// Index on user for quickly finding a user's orders
+orderSchema.index({ user: 1 });
+// Index on isPaid for filtering paid/unpaid orders
+orderSchema.index({ isPaid: 1 });
+// Index on isDelivered for filtering delivered/undelivered orders
+orderSchema.index({ isDelivered: 1 });
+// Compound index for finding a user's paid status
+orderSchema.index({ user: 1, isPaid: 1 });
 
-export default Order
+
+const Order = mongoose.model('Order', orderSchema);
+
+export default Order;
+
