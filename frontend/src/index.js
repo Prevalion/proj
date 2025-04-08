@@ -32,6 +32,11 @@ import OrderListScreen from './screens/admin/OrderListScreen';
 import UserListScreen from './screens/admin/UserListScreen';
 import UserEditScreen from './screens/admin/UserEditScreen';
 import ProtectedRoute from './components/ProtectedRoute';
+import WishlistScreen from './screens/WishlistScreen';
+import AboutContactScreen from './screens/AboutContactScreen';
+import FAQScreen from './screens/FAQScreen';
+import TermsScreen from './screens/TermsScreen';
+import PrivacyPolicyScreen from './screens/PrivacyPolicyScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,6 +50,11 @@ const router = createBrowserRouter(
       <Route path="/cart/:id?" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
+      <Route path='/wishlist' element={<WishlistScreen />} />
+      <Route path='/about-contact' element={<AboutContactScreen />} />
+      <Route path='/faq' element={<FAQScreen />} />
+      <Route path='/terms' element={<TermsScreen />} />
+      <Route path='/privacy' element={<PrivacyPolicyScreen />} /> 
       <Route path="/admin/productlist" element={<ProtectedRoute adminOnly={true}><ProductListScreen /></ProtectedRoute>} />
       {/* Protected Routes */}
       <Route path="/shipping" element={

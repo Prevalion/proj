@@ -1,5 +1,5 @@
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import { FaShoppingCart, FaUser } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaHeart } from 'react-icons/fa'; // Import FaHeart for wishlist icon
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLogoutMutation } from '../slices/usersApiSlice';
@@ -10,12 +10,12 @@ import logo from '../assets/logo.png';
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
-  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const [logoutApiCall] = useLogoutMutation();
-  
+
   const logoutHandler = async () => {
     try {
       await logoutApiCall().unwrap();
@@ -43,6 +43,14 @@ const Header = () => {
               <LinkContainer to='/cart'>
                 <Nav.Link><FaShoppingCart /> Cart </Nav.Link>
               </LinkContainer>
+
+              {/* --- NEW WISHLIST LINK --- */}
+              {/* Optionally, show only when logged in: {userInfo && ( ... )} */}
+              <LinkContainer to='/wishlist'>
+                <Nav.Link><FaHeart /> Wishlist</Nav.Link>
+              </LinkContainer>
+              {/* --- END NEW WISHLIST LINK --- */}
+
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id='username'>
                   <LinkContainer to='/profile'>
@@ -59,15 +67,16 @@ const Header = () => {
               )}
               {userInfo && userInfo.isAdmin && (
                 <NavDropdown title='Admin' id='adminmenu'>
-                  <LinkContainer to='/admin/userlist'>
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/productlist'>
-                    <NavDropdown.Item>Products</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/orderlist'>
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </LinkContainer>
+                   {/* Admin links... */}
+                   <LinkContainer to='/admin/userlist'>
+                     <NavDropdown.Item>Users</NavDropdown.Item>
+                   </LinkContainer>
+                   <LinkContainer to='/admin/productlist'>
+                     <NavDropdown.Item>Products</NavDropdown.Item>
+                   </LinkContainer>
+                   <LinkContainer to='/admin/orderlist'>
+                     <NavDropdown.Item>Orders</NavDropdown.Item>
+                   </LinkContainer>
                 </NavDropdown>
               )}
             </Nav>
