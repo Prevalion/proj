@@ -5,7 +5,7 @@ const orderSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: 'User', // Reference to the User model
+      ref: 'User',
     },
     orderItems: [
       {
@@ -14,7 +14,6 @@ const orderSchema = mongoose.Schema(
         image: { type: String, required: true },
         price: { type: Number, required: true },
         product: {
-          // Reference to the specific product
           type: mongoose.Schema.Types.ObjectId,
           required: true,
           ref: 'Product',
@@ -32,14 +31,12 @@ const orderSchema = mongoose.Schema(
       required: true,
     },
     paymentResult: {
-      // Details from payment provider (e.g., PayPal)
       id: { type: String },
       status: { type: String },
       update_time: { type: String },
       email_address: { type: String },
     },
     itemsPrice: {
-      // Price of items only
       type: Number,
       required: true,
       default: 0.0,
@@ -55,7 +52,6 @@ const orderSchema = mongoose.Schema(
       default: 0.0,
     },
     totalPrice: {
-      // Total cost including tax and shipping
       type: Number,
       required: true,
       default: 0.0,
@@ -78,22 +74,10 @@ const orderSchema = mongoose.Schema(
     },
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    timestamps: true,
   }
 );
-
-// --- Indexes ---
-// Index on user for quickly finding a user's orders
-orderSchema.index({ user: 1 });
-// Index on isPaid for filtering paid/unpaid orders
-orderSchema.index({ isPaid: 1 });
-// Index on isDelivered for filtering delivered/undelivered orders
-orderSchema.index({ isDelivered: 1 });
-// Compound index for finding a user's paid status
-orderSchema.index({ user: 1, isPaid: 1 });
-
 
 const Order = mongoose.model('Order', orderSchema);
 
 export default Order;
-

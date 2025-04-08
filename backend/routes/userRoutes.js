@@ -1,6 +1,4 @@
-// backend/routes/userRoutes.js
 import express from 'express';
-const router = express.Router();
 import {
   authUser,
   registerUser,
@@ -14,8 +12,10 @@ import {
 } from '../controllers/userController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
+const router = express.Router();
+
 router.route('/').post(registerUser).get(protect, admin, getUsers);
-router.post('/login', authUser);
+router.post('/auth', authUser);
 router.post('/logout', logoutUser);
 router
   .route('/profile')
@@ -28,18 +28,3 @@ router
   .put(protect, admin, updateUser);
 
 export default router;
-/* 
-const express = require('express');
-const authController = require('../controllers/authController');
-
-const router = express.Router();
-
-router.post('/', authController.signup);
-router.post('/login', authController.login);
-router.post('/logout', authController.logout);
-router
-  .route('/dashboard')
-  .get(authController.protected, authController.dashboard);
-
-module.exports = router;
-*/

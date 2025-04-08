@@ -1,7 +1,7 @@
-import { USERS_URL } from "../constants";
-import { apiSlice } from "./apiSlice";
+import { apiSlice } from './apiSlice';
+import { USERS_URL } from '../constants';
 
-export const usersApiSlice = apiSlice.injectEndpoints({
+export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
@@ -44,8 +44,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     getUserDetails: builder.query({
-      query: (userId) => ({
-        url: `${USERS_URL}/${userId}`,
+      query: (id) => ({
+        url: `${USERS_URL}/${id}`,
       }),
       keepUnusedDataFor: 5,
     }),
@@ -57,19 +57,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
-    getUserProfile: builder.query({
-      query: () => ({
-        url: `${USERS_URL}/profile`,
-      }),
-      keepUnusedDataFor: 5,
-    }),
-    verifyToken: builder.query({
-      query: () => ({
-        url: `${USERS_URL}/profile`,
-        method: 'GET',
-      }),
-      keepUnusedDataFor: 0,
-    }),
   }),
 });
 
@@ -78,10 +65,8 @@ export const {
   useLogoutMutation,
   useRegisterMutation,
   useProfileMutation,
-  useGetUserProfileQuery,
   useGetUsersQuery,
   useDeleteUserMutation,
-  useGetUserDetailsQuery,
   useUpdateUserMutation,
-  useVerifyTokenQuery,
-} = usersApiSlice;
+  useGetUserDetailsQuery,
+} = userApiSlice;

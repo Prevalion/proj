@@ -1,10 +1,9 @@
-// backend/controllers/userController.js
 import asyncHandler from '../middleware/asyncHandler.js';
-import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
+import User from '../models/userModel.js';
 
 // @desc    Auth user & get token
-// @route   POST /api/users/login
+// @route   POST /api/users/auth
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -64,11 +63,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/logout
 // @access  Public
 const logoutUser = (req, res) => {
-  res.cookie('jwt', '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    expires: new Date(0),
-  });
+  res.clearCookie('jwt');
   res.status(200).json({ message: 'Logged out successfully' });
 };
 
@@ -136,7 +131,7 @@ const deleteUser = asyncHandler(async (req, res) => {
   if (user) {
     if (user.isAdmin) {
       res.status(400);
-      throw new Error('Cannot delete admin user');
+      throw new Error('Can not delete admin user');
     }
     await User.deleteOne({ _id: user._id });
     res.json({ message: 'User removed' });
@@ -159,7 +154,6 @@ const getUserById = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 });
-
 // @desc    Update user
 // @route   PUT /api/users/:id
 // @access  Private/Admin
