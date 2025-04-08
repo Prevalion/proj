@@ -8,7 +8,7 @@ import rateLimit from 'express-rate-limit'; // Basic rate limiting
 import mongoSanitize from 'express-mongo-sanitize'; // NoSQL injection protection
 import xss from 'xss-clean'; // Basic XSS protection
 import pinoHttp from 'pino-http'; // Request logging
-
+import client from 'prom-client';
 import connectDB from './config/db.js';
 import logger from './utils/logger.js'; // Import the shared logger
 import productRoutes from './routes/productRoutes.js';
@@ -25,6 +25,57 @@ connectDB();
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Initialize Prometheus metrics collection
+const collectDefaultMetrics = client.collectDefaultMetrics;
+const Registry = client.Registry;
+const register = new Registry();
+
+collectDefaultMetrics({ register, timeout: 5000 }); // Collect default metrics every 5 seconds
+
+const httpRequestsTotal = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code'],
+  registers: [register]
+});
+
+// Example: HTTP request duration
+const httpRequestDurationMicroseconds = new client.Histogram({
+  name: 'http_request_duration_ms',
+  help: 'Duration of HTTP requests in ms',
+  labelNames: ['method', 'route', 'status_code'],
+  buckets: [0.1, 5, 15, 50, 100, 500],
+  registers: [register]
+});
+
+// Middleware to record metrics for each request
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    httpRequestsTotal.inc({ 
+      method: req.method, 
+      route: req.route ? req.route.path : req.path, 
+      status_code: res.statusCode 
+    });
+    httpRequestDurationMicroseconds.observe(
+      { 
+        method: req.method, 
+        route: req.route ? req.route.path : req.path, 
+        status_code: res.statusCode 
+      },
+      duration
+    );
+  });
+  next();
+});
+
+// Add the metrics endpoint that Prometheus will scrape
+app.get('/metrics', async (req, res) => {
+  res.setHeader('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
+
 // --- Security Middleware ---
 // Set various security HTTP headers
 app.use(helmet());
@@ -36,7 +87,7 @@ app.use(mongoSanitize());
 app.use(xss());
 
 // Health check endpoint for Docker
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK' });
 });
 

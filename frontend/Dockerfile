@@ -15,11 +15,13 @@ FROM node:20-alpine3.18
 
 WORKDIR /app
 
-# Install serve to run the application
-RUN npm install -g serve
-
+# Copy only necessary files from the builder stage
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/server.js ./
+COPY --from=builder /app/package*.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production
 
 RUN mkdir -p /app/uploads
 
@@ -29,4 +31,5 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
 
 EXPOSE 3000
 
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Run the Express server instead of serve
+CMD ["node", "server.js"]
