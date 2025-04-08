@@ -19,7 +19,9 @@
 // If you are using the proxy setting in package.json during development,
 // these relative paths will work. For production builds, ensure your web server
 // correctly proxies requests to the backend API.
-export const BASE_URL = ''; // Proxy handles this in dev. Adjust for production if needed.
+export const BASE_URL = process.env.NODE_ENV === 'development' 
+  ? 'http://localhost:5000' 
+  : ''; // Use localhost for development, empty for production (where proxy is set up)
 export const PRODUCTS_URL = '/api/products';
 export const USERS_URL = '/api/users';
 export const ORDERS_URL = '/api/orders';
