@@ -35,6 +35,11 @@ app.use(mongoSanitize());
 // Prevent basic XSS attacks (sanitizes req.body, req.query, req.params)
 app.use(xss());
 
+// Health check endpoint for Docker
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
+
 // Rate limiting - apply to all requests
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
