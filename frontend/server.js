@@ -1,11 +1,15 @@
 // frontend/server.js
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
 const promClient = require('prom-client');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Add health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
 
 // Create a Registry
 const register = new promClient.Registry();
@@ -56,6 +60,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server is running on port ${PORT}`);
 });
