@@ -30,4 +30,3 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
 EXPOSE 3000
 
 # Run the Express server instead of serve
-CMD ["node", "server.js"]
