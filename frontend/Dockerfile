@@ -20,8 +20,6 @@ COPY --from=builder /app/build ./build
 COPY --from=builder /app/server.js ./
 COPY --from=builder /app/package*.json ./
 
-# Install only production dependencies
-RUN npm ci --only=production
 
 RUN mkdir -p /app/uploads
 
