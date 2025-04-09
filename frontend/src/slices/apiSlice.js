@@ -1,4 +1,4 @@
-import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react.js';
+import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/dist/query/react.js';
 import { BASE_URL } from '../constants.js';
 
 import { logout } from './authSlice.js'; // Import the logout action
