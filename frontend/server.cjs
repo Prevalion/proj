@@ -1,7 +1,11 @@
 // frontend/server.js
-const express = require('express');
-const path = require('path');
-const promClient = require('prom-client');
+import express from 'express';
+import path from 'path';
+import promClient from 'prom-client';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;

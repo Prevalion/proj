@@ -17,7 +17,7 @@ WORKDIR /app
 
 # Copy only necessary files from the builder stage
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/server.js ./
+COPY --from=builder /app/server.cjs ./
 COPY --from=builder /app/package*.json ./
 
 
@@ -30,4 +30,3 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
 EXPOSE 3000
 
 # Run the Express server instead of serve
-CMD ["node", "server.js"]
