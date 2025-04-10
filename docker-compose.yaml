@@ -1,9 +1,24 @@
 services:
+  cadvisor:
+    container_name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8080:8080"
+    volumes: 
+      - "/:/rootfs"
+      - "/var/run:/var/run"
+      - "/sys:/sys"
+      - "/var/lib/docker/:/var/lib/docker"
+      - "/dev/disk/:/dev/disk"
+    privileged: true
+    devices: 
+      - "/dev/kmsg"
+
   frontend:
     build: ./frontend
     container_name: vente-frontend
     ports:
-      - '3000:3000'
+      - '3000:3001'
     stdin_open: true
     tty: true
     networks:
@@ -103,6 +118,8 @@ services:
       - '--web.enable-lifecycle'
     networks:
       - mern-networks
+    depends_on:
+      - cadvisor
 
   grafana:
     image: grafana/grafana:latest
@@ -117,8 +134,13 @@ services:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-changeme123}
       - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - DS_PROMETHEUS=prometheus
     networks:
       - mern-networks
+    privileged: true
+    depends_on:
+      - prometheus
 
   node-exporter:
     image: prom/node-exporter:latest

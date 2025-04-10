@@ -1,11 +1,6 @@
-apiVersion: 1
-
 datasources:
-  - name: Prometheus
+  - name: prometheus
     type: prometheus
+    url: http://localhost:9090
     access: proxy
-    orgId: 1
-    url: http://prometheus:9090
-    basicAuth: false
     isDefault: true
-    editable: false
