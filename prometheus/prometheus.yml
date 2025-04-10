@@ -34,3 +34,9 @@ scrape_configs:
       - targets: ['vente-mongo-exporter:9216']
         labels:
           instance_name: "MongoDB Metrics"
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          instance_name: "Container Metrics"
