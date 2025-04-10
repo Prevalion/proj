@@ -25,10 +25,7 @@
     "liveNow": false,
     "panels": [
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
+        "datasource": "Prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -88,10 +85,7 @@
         "pluginVersion": "10.0.2",
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
+            "datasource": "Prometheus",
             "expr": "count(container_last_seen{image!=\"\"})",
             "intervalFactor": 2,
             "legendFormat": "",
@@ -105,10 +99,7 @@
         "type": "stat"
       },
       {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
+        "datasource": "Prometheus",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -269,10 +260,7 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
+        "datasource": "Prometheus",
         "decimals": 2,
         "editable": true,
         "error": false,
@@ -316,10 +304,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
+            "datasource": "Prometheus",
             "expr": "rate(container_cpu_user_seconds_total{image!=\"\"}[5m]) * 100",
             "intervalFactor": 2,
             "legendFormat": "{{name}}",
@@ -411,10 +396,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
+            "datasource": "Prometheus",
             "expr": "container_memory_usage_bytes{image!=\"\"}",
             "hide": false,
             "intervalFactor": 2,
@@ -461,10 +443,7 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
+        "datasource": "Prometheus",
         "editable": true,
         "error": false,
         "fill": 1,
@@ -505,10 +484,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
+            "datasource": "Prometheus",
             "expr": "irate(container_network_receive_bytes_total{image!=\"\"}[5m])",
             "intervalFactor": 2,
             "legendFormat": "{{name}}",
@@ -553,10 +529,7 @@
         "bars": false,
         "dashLength": 10,
         "dashes": false,
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
+        "datasource": "Prometheus",
         "editable": true,
         "error": false,
         "fill": 1,
@@ -597,10 +570,7 @@
         "steppedLine": false,
         "targets": [
           {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
+            "datasource": "Prometheus",
             "expr": "irate(container_network_transmit_bytes_total{image!=\"\"}[5m])",
             "intervalFactor": 2,
             "legendFormat": "{{name}}",
